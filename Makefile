@@ -1,7 +1,7 @@
 export FULL_VERSION_RELEASE="$$(cat ./VERSION)"
 export FULL_VERSION="$$(cat ./VERSION)-regen-dh"
 export TESTS_FOLDER=$$(TEMP_VAR=$${TESTS_REPORT:-$${PWD}/target/test-reports}; echo $${TEMP_VAR})
-export DOCKER_REPO="alekslitvinenk/openvpn"
+export DOCKER_REPO="ezaton/openvpn"
 export CBRANCH=$$(git rev-parse --abbrev-ref HEAD | tr / -)
 
 .PHONY: build build-release build-local build-dev build-test build-branch install clean test test-branch run
@@ -16,7 +16,7 @@ build:
 
 build-release:
 	@echo "Making manual release version ${FULL_VERSION_RELEASE} of DockOvpn"
-	docker build -t "${DOCKER_REPO}:${FULL_VERSION_RELEASE}" -t ${FULL_VERSION} -t alekslitvinenk/openvpn:latest . --no-cache
+	docker build -t "${DOCKER_REPO}:${FULL_VERSION_RELEASE}" -t ${FULL_VERSION} -t ezaton/openvpn:latest . --no-cache
 	docker push "${DOCKER_REPO}:${FULL_VERSION_RELEASE}"
 	docker push "${DOCKER_REPO}:latest"
 	# Note: This is by design that we don't push ${FULL_VERSION} to repo
