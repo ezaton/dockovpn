@@ -1,6 +1,8 @@
 FROM alpine:latest
 
 LABEL maintainer="Alexander Litvinenko <array.shift@yahoo.com>"
+LABEL builder="Etzion Bar Noy"
+LABEL GitHubPage="https://github.com/ezaton/dockovpn"
 
 # System settings. User normally shouldn't change these parameters
 ENV APP_NAME Dockovpn
