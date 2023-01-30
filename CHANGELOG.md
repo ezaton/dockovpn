@@ -1,5 +1,17 @@
 # Change log
 
+## v1.10.1
+
+- Make docker-internal /etc/openvpn a template to allow persistent /etc/openvpn volume
+- Update README.md to include my agenda
+
+## v1.10.0
+
+- Updated Dockerfile to make use of latest Alpine Linux
+- Updated Dockerfile to include the package iptables
+- Updated Dockerfile to include the new contributer
+- Modify docker naming in Makefile
+
 ## v1.9.0
 
 - Adds possibility to customise HTTP and tunnel port (Issue #170)

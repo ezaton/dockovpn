@@ -32,7 +32,10 @@ RUN apk add --no-cache openvpn easy-rsa bash netcat-openbsd zip dumb-init iptabl
     cp pki/dh.pem /etc/openvpn && \
     # Copy FROM ./scripts/server/conf TO /etc/openvpn/server.conf in DockerFile
     cd ${APP_INSTALL_PATH} && \
-    cp config/server.conf /etc/openvpn/server.conf
+    cp config/server.conf /etc/openvpn/server.conf && \
+    # Create a template for /etc/openvpn to allow persistent initial configuration
+    mv /etc/openvpn /etc/openvpn.template && \
+    mkdir /etc/openvpn
 
 
 EXPOSE 1194/udp

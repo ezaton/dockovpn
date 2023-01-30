@@ -14,12 +14,16 @@
 ![GitHub](https://img.shields.io/github/license/dockovpn/dockovpn)
 
 # 🔐DockOvpn
-Out of the box stateless VPN server docker image which starts in just a few seconds and doesn't require persistent storage. To get it running,  just copy & paste the snippet below and follow instructions in your terminal:
+
+## Thanks
+I would like to thank Aleks and https://dockervpn.io for creating this wonderful container. I have forked their work to modify the image build process. I will try to follow their updates as soon as they are performed, and maintain an updated and well working code and container.
+
+Out of the box stateless VPN server docker image which starts in just a few seconds and doesn't require, but allows persistent storage. To get it running,  just copy & paste the snippet below and follow instructions in your terminal:
 ```bash
 docker run -it --rm --cap-add=NET_ADMIN \
 -p 1194:1194/udp -p 80:8080/tcp \
 -e HOST_ADDR=$(curl -s https://api.ipify.org) \
---name dockovpn alekslitvinenk/openvpn
+--name dockovpn etzion/openvpn
 ```
 To get more detailed information, go to [Quick Start](#-quick-start) tutorial or watch [video](https://youtu.be/y5Dwakc6hMs).
 
@@ -60,7 +64,7 @@ docker run -it --rm --cap-add=NET_ADMIN \
 -e HOST_ADDR=$(curl -s https://api.ipify.org) \
 -e HOST_CONF_PORT="$DOCKOVPN_CONFIG_PORT" \
 -e HOST_TUN_PORT="$DOCKOVPN_TUNNEL_PORT" \
---name dockovpn alekslitvinenk/openvpn
+--name dockovpn etzion/openvpn
 ```
 
 ### Container commands
@@ -88,7 +92,7 @@ Copy & paste the following command to run docker-openvpn:<br>
 docker run -it --rm --cap-add=NET_ADMIN \
 -p 1194:1194/udp -p 80:8080/tcp \
 -e HOST_ADDR=$(curl -s https://api.ipify.org) \
---name dockovpn alekslitvinenk/openvpn
+--name dockovpn etzion/openvpn
 ```
 **⚠️ Note:** This snippet runs Dockovpn in attached mode, which means if you close your terminal window, container will be stopped. 
 To prevent this from happening, you first need to detach container from ssh session. Type `Ctrl+P Ctrl+Q`.
@@ -118,6 +122,10 @@ Congratulations, now you're all set and can safely browse the internet.
 There's a possibility to persist generated files in volume storage. Run docker with
 ```bash
 -v openvpn_conf:/opt/Dockovpn_data
+```
+There's a possibility to persist openVPN configuration files in volume storage. Append
+```bash
+-v openvpn_etc:/etc/openvpn
 ```
 
 ## Alternative way. Run with docker-compose

@@ -1,5 +1,5 @@
 export FULL_VERSION_RELEASE="$$(cat ./VERSION)"
-export FULL_VERSION="$$(cat ./VERSION)-regen-dh"
+export FULL_VERSION="$$(cat ./VERSION)"
 export TESTS_FOLDER=$$(TEMP_VAR=$${TESTS_REPORT:-$${PWD}/target/test-reports}; echo $${TEMP_VAR})
 export DOCKER_REPO="etzion/openvpn"
 export CBRANCH=$$(git rev-parse --abbrev-ref HEAD | tr / -)

@@ -61,6 +61,12 @@ EOF4
     touch $LOCKFILE
 fi
 
+# Copy initial configuration and scripts if /etc/openvpn is empty
+# Allows /etc/openvpn to be mapped to persistent volume
+if [[ ! -f /etc/openvpn/server.conf ]]; then
+    cp /etc/openvpn.template/* /etc/openvpn/
+fi
+
 # Copy server keys and certificates
 cp pki/ca.crt pki/issued/MyReq.crt pki/private/MyReq.key pki/crl.pem ta.key /etc/openvpn
 
