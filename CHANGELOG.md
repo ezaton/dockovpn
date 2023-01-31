@@ -3,6 +3,7 @@
 ## v1.10.2
 
 - Correct deployment for external volume Dockovpn_data - missing pki directory
+- Update start.sh and functions.sh to handle more modern easyrsa
 
 ## v1.10.1
 
