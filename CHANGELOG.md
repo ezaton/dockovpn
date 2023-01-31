@@ -1,5 +1,9 @@
 # Change log
 
+## v1.10.3
+
+- Better handling of removed certificates by verifying them against the CRL and then removing them from the clients directory
+
 ## v1.10.2
 
 - Correct deployment for external volume Dockovpn_data - missing pki directory
