@@ -33,9 +33,14 @@ LOCKFILE=.gen
 if [ ! -f $LOCKFILE ]; then
     IS_INITIAL="1"
     cp -R ${APP_PERSIST_DIR}.template/* ${APP_PERSIST_DIR}/
-    easyrsa build-ca nopass << EOF
-
+    # If existing CA is already in place, we need to clean it up
+    easyrsa init-pki << EOF
+yes
 EOF
+
+    easyrsa build-ca nopass << EOF1
+
+EOF1
     # CA creation complete and you may now import and sign cert requests.
     # Your new CA certificate file for publishing is at:
     # /opt/Dockovpn_data/pki/ca.crt
@@ -52,7 +57,7 @@ yes
 EOF3
     # Certificate created at: /opt/Dockovpn_data/pki/issued/MyReq.crt
 
-    openvpn --genkey --secret ta.key << EOF4
+    openvpn --genkey secret ta.key << EOF4
 yes
 EOF4
 

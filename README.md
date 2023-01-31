@@ -34,7 +34,7 @@ https://dockovpn.io
 https://github.com/dockovpn/dockovpn
 
 ## DockerHub Repo:
-https://hub.docker.com/r/alekslitvinenk/openvpn
+https://hub.docker.com/r/etzion/openvpn
 
 ### Docker Tags
 | Tag    | Description |
