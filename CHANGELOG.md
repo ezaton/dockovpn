@@ -1,5 +1,9 @@
 # Change log
 
+## v1.10.2
+
+- Correct deployment for external volume Dockovpn_data - missing pki directory
+
 ## v1.10.1
 
 - Make docker-internal /etc/openvpn a template to allow persistent /etc/openvpn volume

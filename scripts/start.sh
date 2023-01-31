@@ -32,7 +32,7 @@ LOCKFILE=.gen
 # Regenerate certs only on the first start 
 if [ ! -f $LOCKFILE ]; then
     IS_INITIAL="1"
-
+    cp -R ${APP_PERSIST_DIR}.template/* ${APP_PERSIST_DIR}/
     easyrsa build-ca nopass << EOF
 
 EOF
