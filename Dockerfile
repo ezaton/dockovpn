@@ -35,8 +35,8 @@ RUN apk add --no-cache openvpn easy-rsa bash netcat-openbsd zip dumb-init iptabl
     cp config/server.conf /etc/openvpn/server.conf && \
     # Create a template for /etc/openvpn to allow persistent initial configuration
     mv /etc/openvpn /etc/openvpn.template && \
-    mkdir /etc/openvpn
-    mv ${APP_PERSIST_DIR} ${APP_PERSIST_DIR}.template
+    mkdir /etc/openvpn && \
+    mv ${APP_PERSIST_DIR} ${APP_PERSIST_DIR}.template && \
     mkdir ${APP_PERSIST_DIR}
 
 
