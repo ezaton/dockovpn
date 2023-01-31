@@ -140,6 +140,21 @@ docker-compose exec -d dockovpn wget -O /doc/Dockovpn/client.ovpn localhost:8080
 
 After run this command you can find your `client.ovpn` inside `openvpn_conf` folder.
 
+## Error message "modprobe: can't change directory to '/lib/modules': No such file or directory"
+This is caused by missing modules on the host. Enforce loading these modules on the container host:
+1. iptable_filter
+2. iptable_nat
+For RedHat type systems, to load these modules on-boot, create a file for each in /etc/modules-load.d like this:
+```bash
+echo "iptable_filter" > /etc/modules-load.d/iptable_filter.conf
+echo "iptable_nat" > /etc/modules-load.d/iptable_nat.conf
+```
+Manually load the modules using the command:
+```bash
+modprobe iptable_filter
+modprobe iptable_nat
+```
+
 # Other resources
 [Contrubition Guidelines](https://github.com/alekslitvinenk/docker-openvpn/blob/master/CONTRIBUTING.md)<br>
 [Code Of Conduct](https://github.com/alekslitvinenk/docker-openvpn/blob/master/CODE_OF_CONDUCT.md)<br>
