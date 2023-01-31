@@ -138,7 +138,12 @@ docker-compose up -d && \
 docker-compose exec -d dockovpn wget -O /doc/Dockovpn/client.ovpn localhost:8080
 ```
 
-After run this command you can find your `client.ovpn` inside `openvpn_conf` folder.
+After run this command you can find your `client.ovpn` inside `openvpn_data` folder.
+An example working docker-compose.yaml file is provided here.
+
+## Alternative with better security - Run with docker-compose and nginx frontend for vpn configuration file
+Check out the code directory compose-with-nginx for an example here: https://github.com/ezaton/dockovpn/compose-with-nginx
+This section is derieved from https://github.com/NotEgorL/docker-openvpn
 
 ## Error message "modprobe: can't change directory to '/lib/modules': No such file or directory"
 This is caused by missing modules on the host. Enforce loading these modules on the container host:
