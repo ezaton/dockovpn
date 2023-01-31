@@ -142,7 +142,7 @@ After run this command you can find your `client.ovpn` inside `openvpn_data` fol
 An example working docker-compose.yaml file is provided here.
 
 ## Alternative with better security - Run with docker-compose and nginx frontend for vpn configuration file
-Check out the code directory compose-with-nginx for an example here: https://github.com/ezaton/dockovpn/compose-with-nginx
+Check out the code directory compose-with-nginx for an example here: https://github.com/ezaton/dockovpn/tree/master/compose-with-nginx
 This section is derieved from https://github.com/NotEgorL/docker-openvpn
 
 ## Error message "modprobe: can't change directory to '/lib/modules': No such file or directory"
