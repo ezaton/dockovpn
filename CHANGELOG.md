@@ -1,5 +1,12 @@
 # Change log
 
+## v1.11.0
+
+- Add ability to specify client name
+- Script code cleanup
+- Allow reuse of existing functions
+- Include getopts to reduce complexity of handling user flags
+
 ## v1.10.3
 
 - Better handling of removed certificates by verifying them against the CRL and then removing them from the clients directory

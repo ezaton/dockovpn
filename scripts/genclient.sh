@@ -2,20 +2,41 @@
 
 source ./functions.sh
 
-CLIENT_PATH="$(createConfig)"
+
 CONTENT_TYPE=application/text
 FILE_NAME=client.ovpn
+
+
+while getopts 'vhzop:u:' flag; do 
+    case "${flag}" in
+        h)  print_usage
+            ;;
+        z)  FLAGS="${FLAGS}z"
+            ;;
+        p)  FLAGS="${FLAGS}p"
+            pass=${OPTARG}
+            ;;
+        o)  FLAGS="${FLAGS}o"
+            ;;
+        u)  name=${OPTARG}
+            ;;
+        v)  version
+            exit 0
+            ;;
+        *)  print_usage
+            ;;
+    esac
+done
+
+CLIENT_PATH="$(createConfig ${name})"
+if [ $? -ne 0 ]; then
+    [ -n "${name}" ] && CLIENT_PATH=${name}
+    echo "$(datef) Cannot create client ${CLIENT_PATH}" && exit 1
+fi
 FILE_PATH="$CLIENT_PATH/$FILE_NAME"
-
-if (($#))
-then
-
-    # Parse string into chars:
-    # z    Zip user config
-    # p    User password for the zip archive
-    FLAGS=$1
-
-    # Switch statement
+# Possible permutations:
+# Switch statement
+if [ -n "${FLAGS}" ]; then
     case $FLAGS in
         z)
             zipFiles "$CLIENT_PATH"
@@ -26,11 +47,11 @@ then
             ;;
         zp)
             # (()) engaes arthimetic context
-            if (($# < 2))
+            if [ -z "$pass" ]
             then
                 echo "$(datef) Not enough arguments" && exit 1
             else
-                zipFilesWithPassword "$CLIENT_PATH" "$2"
+                zipFilesWithPassword "$CLIENT_PATH" "$pass"
 
                 CONTENT_TYPE=application/zip
                 FILE_NAME=client.zip
@@ -50,7 +71,7 @@ then
             exit 0
             ;;
         ozp)
-            if (($# < 2))
+            if [ -z "$pass" ]
             then
                 echo "$(datef) Not enough arguments" && exit 1
             else
@@ -62,11 +83,13 @@ then
                 exit 0
             fi
             ;;
-        *) echo "$(datef) Unknown parameters $FLAGS"
+        *)  
+            echo "$(datef) Unknown parameters $FLAGS"
             ;;
 
     esac
 fi
+
 echo "$(datef) $FILE_PATH file has been generated"
 
 echo "$(datef) Config server started, download your $FILE_NAME config at http://$HOST_ADDR:$HOST_CONF_PORT/"

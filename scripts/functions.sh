@@ -8,8 +8,16 @@ function datef() {
 
 function createConfig() {
     cd "$APP_PERSIST_DIR"
-    CLIENT_ID="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)"
+    if [ -n "$1" ]; then
+        CLIENT_ID=${1}
+    else
+        CLIENT_ID="$(cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1)"
+    fi
     CLIENT_PATH="$APP_PERSIST_DIR/clients/$CLIENT_ID"
+
+    if [ -d "$APP_PERSIST_DIR/clients/$CLIENT_ID" ] ; then
+        echo "$(datef) Client ID $CLIENT_ID already exists" && exit 1
+    fi
 
     # Redirect stderr to the black hole
     easyrsa build-client-full "$CLIENT_ID" nopass &> /dev/null << EOF
@@ -84,4 +92,14 @@ EOF
     cp ${APP_PERSIST_DIR}/pki/crl.pem /etc/openvpn
 
     cd "$APP_INSTALL_PATH"
+}
+
+function print_usage() {
+    echo "Usage: $0 [-v|-z|-p password|-o|-u name]"
+    exit 0
+}
+
+function version() {
+    APP_VERSION="$(cat $APP_INSTALL_PATH/config/VERSION)"
+    echo "$(datef) $APP_NAME $APP_VERSION"
 }
