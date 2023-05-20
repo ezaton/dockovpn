@@ -17,8 +17,8 @@ build:
 	$(GET_ALPINE)
 	$(GET_VERSION)
 	@echo $(VERSION)
-	docker build -t "${DOCKER_REPO}:${FULL_VERSION}" -t "${DOCKER_REPO}:latest" . --no-cache
-	docker push "${DOCKER_REPO}:${FULL_VERSION}"
+	docker build -t "${DOCKER_REPO}:${VERSION}" -t "${DOCKER_REPO}:latest" . --no-cache
+	docker push "${DOCKER_REPO}:${VERSION}"
 	docker push "${DOCKER_REPO}:latest"
 
 build-release:
