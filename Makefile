@@ -3,6 +3,7 @@ export FULL_VERSION="$$(cat ./VERSION)"
 export TESTS_FOLDER=$$(TEMP_VAR=$${TESTS_REPORT:-$${PWD}/target/test-reports}; echo $${TEMP_VAR})
 export DOCKER_REPO="etzion/openvpn"
 export CBRANCH=$$(git rev-parse --abbrev-ref HEAD | tr / -)
+FULL_VERSION_RELEASE = $(shell cat ./VERSION)
 GET_ALPINE = $(docker image rm alpine:latest ; docker image pull alpine:latest)
 GET_ALP_VERSION = $(shell docker run --rm alpine:latest grep ^VERSION /etc/os-release | cut -f 2 -d = )
 GET_VERSION = $(eval VERSION=$(FULL_VERSION_RELEASE)_ALP$(GET_ALP_VERSION))
@@ -13,12 +14,18 @@ all: build
 
 build:
 	@echo "Making production version ${FULL_VERSION} of DockOvpn"
+	$(GET_ALPINE)
+	$(GET_VERSION)
+	@echo $(VERSION)
 	docker build -t "${DOCKER_REPO}:${FULL_VERSION}" -t "${DOCKER_REPO}:latest" . --no-cache
 	docker push "${DOCKER_REPO}:${FULL_VERSION}"
 	docker push "${DOCKER_REPO}:latest"
 
 build-release:
 	@echo "Making manual release version ${FULL_VERSION_RELEASE} of DockOvpn"
+	$(GET_ALPINE)
+	$(GET_VERSION)
+	@echo $(VERSION)
 	docker build -t "${DOCKER_REPO}:${FULL_VERSION_RELEASE}" -t ${FULL_VERSION} -t ezaton/openvpn:latest . --no-cache
 	docker push "${DOCKER_REPO}:${FULL_VERSION_RELEASE}"
 	docker push "${DOCKER_REPO}:latest"
@@ -26,6 +33,9 @@ build-release:
 
 build-local:
 	@echo "Making version of DockOvpn for testing on local machine"
+	$(GET_ALPINE)
+	$(GET_VERSION)
+	@echo $(VERSION)
 	docker build -t "${DOCKER_REPO}:local" . --no-cache
 
 build-dev:
