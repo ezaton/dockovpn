@@ -3,6 +3,9 @@ export FULL_VERSION="$$(cat ./VERSION)"
 export TESTS_FOLDER=$$(TEMP_VAR=$${TESTS_REPORT:-$${PWD}/target/test-reports}; echo $${TEMP_VAR})
 export DOCKER_REPO="etzion/openvpn"
 export CBRANCH=$$(git rev-parse --abbrev-ref HEAD | tr / -)
+GET_ALPINE = $(docker image rm alpine:latest ; docker image pull alpine:latest)
+GET_ALP_VERSION = $(shell docker run --rm alpine:latest grep ^VERSION /etc/os-release | cut -f 2 -d = )
+GET_VERSION = $(eval VERSION=$(FULL_VERSION_RELEASE)_ALP$(GET_ALP_VERSION))
 
 .PHONY: build build-release build-local build-dev build-test build-branch install clean test test-branch run
 
