@@ -34,27 +34,18 @@ if [ ! -f $LOCKFILE ]; then
     IS_INITIAL="1"
     cp -R ${APP_PERSIST_DIR}.template/* ${APP_PERSIST_DIR}/
     # If existing CA is already in place, we need to clean it up
-    easyrsa init-pki << EOF
-yes
-EOF
-
-    easyrsa build-ca nopass << EOF1
-
-EOF1
+    easyrsa --batch init-pki
+    easyrsa --batch build-ca nopass 
     # CA creation complete and you may now import and sign cert requests.
     # Your new CA certificate file for publishing is at:
     # /opt/Dockovpn_data/pki/ca.crt
 
-    easyrsa gen-req MyReq nopass << EOF2
-
-EOF2
+    easyrsa --batch gen-req MyReq nopass 
     # Keypair and certificate request completed. Your files are:
     # req: /opt/Dockovpn_data/pki/reqs/MyReq.req
     # key: /opt/Dockovpn_data/pki/private/MyReq.key
 
-    easyrsa sign-req server MyReq << EOF3
-yes
-EOF3
+    easyrsa --batch sign-req server MyReq 
     # Certificate created at: /opt/Dockovpn_data/pki/issued/MyReq.crt
 
     openvpn --genkey secret ta.key << EOF4
@@ -75,7 +66,7 @@ if [[ ! -f /etc/openvpn/server.conf ]]; then
 fi
 
 # Copy server keys and certificates
-cp pki/ca.crt pki/issued/MyReq.crt pki/private/MyReq.key pki/crl.pem ta.key /etc/openvpn
+cp pki/dh.pem pki/ca.crt pki/issued/MyReq.crt pki/private/MyReq.key pki/crl.pem ta.key /etc/openvpn
 
 cd "$APP_INSTALL_PATH"
 

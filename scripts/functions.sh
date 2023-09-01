@@ -20,9 +20,7 @@ function createConfig() {
     fi
 
     # Redirect stderr to the black hole
-    easyrsa build-client-full "$CLIENT_ID" nopass &> /dev/null << EOF
-yes
-EOF
+    easyrsa --batch build-client-full "$CLIENT_ID" nopass &> /dev/null
 
     # Writing new private key to '/usr/share/easy-rsa/pki/private/client.key
     # Client sertificate /usr/share/easy-rsa/pki/issued/client.crt
@@ -84,9 +82,8 @@ function removeConfig() {
 
     cd "$APP_PERSIST_DIR"
 
-    easyrsa revoke $CLIENT_ID << EOF
-yes
-EOF
+    easyrsa --batch revoke $CLIENT_ID
+
     EASYRSA_CRL_DAYS=3650 easyrsa gen-crl
 
     cp ${APP_PERSIST_DIR}/pki/crl.pem /etc/openvpn

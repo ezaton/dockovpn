@@ -1,5 +1,12 @@
 # Change log
 
+## v1.13.0
+- Adjust easyrsa commands to use --batch mode
+- Add to compose-with-nginx directory scripts to ease management of users (add/remove)
+
+## v1.12.0
+- Recreate CRL on each startup, and this time - with a 10 years expiry
+
 ## v1.11.0
 
 - Add ability to specify client name
