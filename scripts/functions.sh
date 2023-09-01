@@ -87,7 +87,7 @@ function removeConfig() {
     easyrsa revoke $CLIENT_ID << EOF
 yes
 EOF
-    easyrsa gen-crl
+    EASYRSA_CRL_DAYS=3650 easyrsa gen-crl
 
     cp ${APP_PERSIST_DIR}/pki/crl.pem /etc/openvpn
 

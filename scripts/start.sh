@@ -60,11 +60,13 @@ EOF3
     openvpn --genkey secret ta.key << EOF4
 yes
 EOF4
-
-    easyrsa gen-crl
+    
 
     touch $LOCKFILE
 fi
+
+# Regenereate CRL on each startup, with a 10 years expiry
+EASYRSA_CRL_DAYS=3650 easyrsa gen-crl
 
 # Copy initial configuration and scripts if /etc/openvpn is empty
 # Allows /etc/openvpn to be mapped to persistent volume
