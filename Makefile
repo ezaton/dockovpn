@@ -1,12 +1,14 @@
 export FULL_VERSION_RELEASE="$$(cat ./VERSION)"
 export FULL_VERSION="$$(cat ./VERSION)"
 export TESTS_FOLDER=$$(TEMP_VAR=$${TESTS_REPORT:-$${PWD}/target/test-reports}; echo $${TEMP_VAR})
-export DOCKER_REPO="etzion/openvpn"
+export DOCKER_REPO=etzion/openvpn
 export CBRANCH=$$(git rev-parse --abbrev-ref HEAD | tr / -)
 FULL_VERSION_RELEASE = $(shell cat ./VERSION)
 GET_ALPINE = $(docker image rm alpine:latest ; docker image pull alpine:latest)
 GET_ALP_VERSION = $(shell docker run --rm alpine:latest grep ^VERSION /etc/os-release | cut -f 2 -d = )
 GET_VERSION = $(eval VERSION=$(FULL_VERSION_RELEASE)_ALP$(GET_ALP_VERSION))
+GET_ARCHV = $(shell arch | grep -q x86_64 && echo x86_64 || echo arm64)
+GET_ARCH = $(eval ARCH=$(GET_ARCHV))
 
 .PHONY: build build-release build-local build-dev build-test build-branch install clean test test-branch run
 
@@ -16,10 +18,12 @@ build:
 	@echo "Making production version ${FULL_VERSION} of DockOvpn"
 	$(GET_ALPINE)
 	$(GET_VERSION)
+	$(GET_ARCH)
 	@echo $(VERSION)
-	docker build -t "${DOCKER_REPO}:${VERSION}" -t "${DOCKER_REPO}:latest" . --no-cache
-	docker push "${DOCKER_REPO}:${VERSION}"
-	docker push "${DOCKER_REPO}:latest"
+	@echo $(ARCH)
+	docker build -t "${DOCKER_REPO}-${ARCH}:${VERSION}" -t "${DOCKER_REPO}-${ARCH}:latest" . --no-cache
+	docker push "${DOCKER_REPO}-${ARCH}:${VERSION}"
+	docker push "${DOCKER_REPO}-${ARCH}:latest"
 
 build-release:
 	@echo "Making manual release version ${FULL_VERSION_RELEASE} of DockOvpn"
