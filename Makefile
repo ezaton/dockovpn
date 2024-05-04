@@ -26,8 +26,8 @@ build:
 	docker push "${DOCKER_REPO}-${ARCH}:latest"
 	docker manifest create --amend etzion/openvpn:latest etzion/openvpn-arm64:latest etzion/openvpn-x86_64:latest
 	docker manifest create --amend etzion/openvpn:${VERSION} etzion/openvpn-arm64:${VERSION} etzion/openvpn-x86_64:${VERSION}
-	docker push etzion/openvpn:latest
-	docker push etzion/openvpn:${VERSION}
+	docker manifest push etzion/openvpn:latest
+	docker manifest push etzion/openvpn:${VERSION}
 
 build-release:
 	@echo "Making manual release version ${FULL_VERSION_RELEASE} of DockOvpn"
