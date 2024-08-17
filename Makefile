@@ -24,6 +24,32 @@ build:
 	docker build -t "${DOCKER_REPO}-${ARCH}:${VERSION}" -t "${DOCKER_REPO}-${ARCH}:latest" . --no-cache
 	docker push "${DOCKER_REPO}-${ARCH}:${VERSION}"
 	docker push "${DOCKER_REPO}-${ARCH}:latest"
+ifeq ($(ARCH), x86_64)
+	docker tag "${DOCKER_REPO}-${ARCH}:latest" "${DOCKER_REPO}:latest"
+	docker push "${DOCKER_REPO}:latest"
+	docker tag "${DOCKER_REPO}-${ARCH}:${VERSION}" "${DOCKER_REPO}:${VERSION}"
+	docker push "${DOCKER_REPO}:${VERSION}"
+endif
+	docker manifest create --amend etzion/openvpn:latest etzion/openvpn-arm64:latest etzion/openvpn-x86_64:latest
+	docker manifest create --amend etzion/openvpn:${VERSION} etzion/openvpn-arm64:${VERSION} etzion/openvpn-x86_64:${VERSION}
+	docker manifest push etzion/openvpn:latest
+	docker manifest push etzion/openvpn:${VERSION}
+
+push:
+	@echo "Pushing production version ${FULL_VERSION} of DockOvpn"
+	$(GET_ALPINE)
+	$(GET_VERSION)
+	$(GET_ARCH)
+	@echo $(VERSION)
+	@echo $(ARCH)
+	#docker push "${DOCKER_REPO}-${ARCH}:${VERSION}"
+	#docker push "${DOCKER_REPO}-${ARCH}:latest"
+ifeq ($(ARCH), x86_64)
+	docker tag "${DOCKER_REPO}-${ARCH}:latest" "${DOCKER_REPO}:latest"
+	docker push "${DOCKER_REPO}:latest"
+	docker tag "${DOCKER_REPO}-${ARCH}:${VERSION}" "${DOCKER_REPO}:${VERSION}"
+	docker push "${DOCKER_REPO}:${VERSION}"
+endif
 	docker manifest create --amend etzion/openvpn:latest etzion/openvpn-arm64:latest etzion/openvpn-x86_64:latest
 	docker manifest create --amend etzion/openvpn:${VERSION} etzion/openvpn-arm64:${VERSION} etzion/openvpn-x86_64:${VERSION}
 	docker manifest push etzion/openvpn:latest
