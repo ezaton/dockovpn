@@ -48,7 +48,7 @@ push:
 	docker push "${DOCKER_REPO}:latest"
 	docker tag "${DOCKER_REPO}-${ARCH}:${VERSION}" "${DOCKER_REPO}:${VERSION}"
 	docker push "${DOCKER_REPO}:${VERSION}"
-ifeq ($(ARCH), x86_64)
+ifeq ($(shell uname -p),x86_64)
 	docker manifest create --amend etzion/openvpn:latest etzion/openvpn-arm64:latest etzion/openvpn-x86_64:latest
 	docker manifest create --amend etzion/openvpn:${VERSION} etzion/openvpn-arm64:${VERSION} etzion/openvpn-x86_64:${VERSION}
 	docker manifest push etzion/openvpn:latest
