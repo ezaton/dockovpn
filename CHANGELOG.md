@@ -1,4 +1,6 @@
 # Change log
+## v1.14.0
+- Migrate to github actions
 
 ## v1.13.0
 - Adjust easyrsa commands to use --batch mode
