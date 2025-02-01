@@ -33,12 +33,9 @@ jobs:
           FULL_VERSION="$(cat ./VERSION)_ALP${{ steps.get-alpine.outputs.version }}"
           echo "version=$FULL_VERSION" >> $GITHUB_OUTPUT
 
-  build:
+  build-and-push:
     needs: check-alpine
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        platform: [x86_64, arm64]
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -55,38 +52,12 @@ jobs:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-      - name: Build and push platform-specific image
+      - name: Build and push multi-platform image
         uses: docker/build-push-action@v5
         with:
           context: .
-          platforms: linux/${{ matrix.platform == 'x86_64' && 'amd64' || 'arm64' }}
+          platforms: linux/amd64,linux/arm64
           push: true
           tags: |
-            etzion/openvpn-${{ matrix.platform }}:latest
-            etzion/openvpn-${{ matrix.platform }}:${{ needs.check-alpine.outputs.version }}
-
-  create-manifest:
-    needs: [check-alpine, build]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Login to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
-
-      - name: Create and push manifest
-        run: |
-          # Create and push latest manifest
-          docker manifest create --amend \
-            etzion/openvpn:latest \
-            etzion/openvpn-arm64:latest \
-            etzion/openvpn-x86_64:latest
-          docker manifest push etzion/openvpn:latest
-
-          # Create and push versioned manifest
-          docker manifest create --amend \
-            etzion/openvpn:${{ needs.check-alpine.outputs.version }} \
-            etzion/openvpn-arm64:${{ needs.check-alpine.outputs.version }} \
-            etzion/openvpn-x86_64:${{ needs.check-alpine.outputs.version }}
-          docker manifest push etzion/openvpn:${{ needs.check-alpine.outputs.version }}
+            etzion/openvpn:latest
+            etzion/openvpn:${{ needs.check-alpine.outputs.version }}
