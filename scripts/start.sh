@@ -79,6 +79,13 @@ if [[ ! -f /etc/openvpn/server.conf ]]; then
     cp /etc/openvpn.template/* /etc/openvpn/
 fi
 
+# Keep dh.pem - either the one generated on build or the persistent one - if missing
+if [ ! -f pki/dh.pem ] ; then 
+    if [ -f /etc/openvpn/dh.pem ] ; then
+        echo "Copying dh.pem from /etc/openvpn"
+        cp /etc/openvpn/dh.pem pki/dh.pem
+    fi
+fi
 # Copy server keys and certificates
 cp pki/dh.pem pki/ca.crt pki/issued/MyReq.crt pki/private/MyReq.key pki/crl.pem ta.key /etc/openvpn
 
