@@ -59,6 +59,20 @@ fi
 # Regenereate CRL on each startup, with a 10 years expiry
 EASYRSA_CRL_DAYS=3650 easyrsa gen-crl
 
+# We need to check if a renew of the server certificate is required
+# The server certificate is valid for 14 days, or custom variable CERTAGE
+[ -z "$CERTAGE"] && CERTAGE=14
+echo "Checking if the server certificate is still valid"
+openssl x509 -in pki/issued/MyReq.crt -checkend $(( ${CERTAGE} * 86400 )) -noout
+if [ $? -eq 0 ]; then
+    echo "Server Certificate is still valid"
+else
+    echo "Server Certificate is expired, regenerating"
+    mv -f pki/issued/MyReq.crt pki/issued/MyReq.crt.old
+    # Renew the certificate
+    easyrsa --batch sign-req server MyReq
+fi
+
 # Copy initial configuration and scripts if /etc/openvpn is empty
 # Allows /etc/openvpn to be mapped to persistent volume
 if [[ ! -f /etc/openvpn/server.conf ]]; then

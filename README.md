@@ -160,6 +160,13 @@ modprobe iptable_filter
 modprobe iptable_nat
 ```
 
+## Relevant variables
+| Variable  | Description | Parameters | Example |
+| :------:  | :---------: | :--------: | :-----: |
+| `HOST_ADDR` | External host IP or hostname address | string | HOST_ADDR=mydomain.com |
+| `HOST_PORT` | The internal listener port used for dispatching new configuration file | integer | HOST_PORT=8001 |
+| `CERTAGE` | The age remaining in days before the expiry date of the server certificate. Will trigger a renewal upon startup when this age is met. Defaults to 14 days if unset | integer | CERTAGE=14 |
+
 # Other resources
 [Contrubition Guidelines](https://github.com/alekslitvinenk/docker-openvpn/blob/master/CONTRIBUTING.md)<br>
 [Code Of Conduct](https://github.com/alekslitvinenk/docker-openvpn/blob/master/CODE_OF_CONDUCT.md)<br>

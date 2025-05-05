@@ -1,4 +1,7 @@
 # Change log
+## v1.15.0
+- Add server certificate age check and update the server's certificate if required
+- The optional variable to control this age check is CERTAGE
 ## v1.14.0
 - Migrate to github actions
 
