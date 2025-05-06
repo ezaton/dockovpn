@@ -1,15 +1,24 @@
 # Change log
+## v1.15.1
+
+- If missing dh.pem - copy it from the openvpn build process. If exists - save it in docovpn_data
+
 ## v1.15.0
+
 - Add server certificate age check and update the server's certificate if required
 - The optional variable to control this age check is CERTAGE
+
 ## v1.14.0
+
 - Migrate to github actions
 
 ## v1.13.0
+
 - Adjust easyrsa commands to use --batch mode
 - Add to compose-with-nginx directory scripts to ease management of users (add/remove)
 
 ## v1.12.0
+
 - Recreate CRL on each startup, and this time - with a 10 years expiry
 
 ## v1.11.0
