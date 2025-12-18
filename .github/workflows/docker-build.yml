@@ -1,5 +1,8 @@
 name: Docker Multi-Platform Build
 
+env:
+  DOCKER_REPO: etzion/docovpn
+
 on:
   push:
     branches: [ main ]
@@ -16,6 +19,7 @@ jobs:
     outputs:
       alpine_version: ${{ steps.get-alpine.outputs.version }}
       version: ${{ steps.get-version.outputs.version }}
+      needs_build: ${{ steps.should-build.outputs.build }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -27,15 +31,45 @@ jobs:
           VERSION=$(docker run --rm alpine:latest grep ^VERSION /etc/os-release | cut -f 2 -d =)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
+      - name: Get released Alpine version
+        id: get-released
+        if: github.event_name == 'schedule'
+        run: |
+          if docker pull ${{ env.DOCKER_REPO }}:latest; then
+            VERSION=$(docker run --rm ${{ env.DOCKER_REPO }}:latest grep ^VERSION /etc/os-release | cut -f 2 -d =)
+            echo "version=$VERSION" >> $GITHUB_OUTPUT
+          else
+            echo "version=" >> $GITHUB_OUTPUT
+          fi
+
       - name: Generate full version
         id: get-version
         run: |
           FULL_VERSION="$(cat ./VERSION)_ALP${{ steps.get-alpine.outputs.version }}"
           echo "version=$FULL_VERSION" >> $GITHUB_OUTPUT
 
+      - name: Determine if build is required
+        id: should-build
+        run: |
+          if [ "${{ github.event_name }}" != "schedule" ]; then
+            echo "build=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          NEW="${{ steps.get-alpine.outputs.version }}"
+          CURRENT="${{ steps.get-released.outputs.version }}"
+          if [ -z "$CURRENT" ] || [ "$NEW" != "$CURRENT" ]; then
+            echo "build=true" >> $GITHUB_OUTPUT
+            echo "::notice::Detected Alpine update (new=$NEW current=${CURRENT:-none}); build will run."
+          else
+            echo "build=false" >> $GITHUB_OUTPUT
+            echo "::notice::No new Alpine release detected (version $NEW); skipping build."
+          fi
+
   build-and-push:
     needs: check-alpine
     runs-on: ubuntu-latest
+    if: github.event_name != 'schedule' || needs.check-alpine.outputs.needs_build == 'true'
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
