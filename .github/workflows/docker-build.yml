@@ -1,7 +1,7 @@
 name: Docker Multi-Platform Build
 
 env:
-  DOCKER_REPO: etzion/docovpn
+  DOCKER_REPO: etzion/openvpn
 
 on:
   push:
