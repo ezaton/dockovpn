@@ -28,8 +28,7 @@ jobs:
         id: get-alpine
         run: |
           docker pull alpine:latest
-          # Temp fix # VERSION=$(docker run --rm alpine:latest grep ^VERSION /etc/os-release | cut -f 2 -d =)
-          VERSION="3.23.2"
+          VERSION=$(docker run --rm alpine:latest grep ^VERSION /etc/os-release | cut -f 2 -d =)
           echo "version=$VERSION" >> $GITHUB_OUTPUT
 
       - name: Get released Alpine version
