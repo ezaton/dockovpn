@@ -96,6 +96,7 @@ $APP_INSTALL_PATH/version.sh
 
 # Need to feed key password
 openvpn --config /etc/openvpn/server.conf &
+RET=$?
 
 if [[ -n $IS_INITIAL ]]; then
     # By some strange reason we need to do echo command to get to the next command
@@ -103,6 +104,12 @@ if [[ -n $IS_INITIAL ]]; then
 
     # Generate client config
     ./genclient.sh $@
+fi
+
+if [ $RET -ne 0 ]; then
+    # Respond now to avoid the case when the server fails to start and the container remains hanging.
+    echo "Failed to start OpenVPN server"
+    exit $RET
 fi
 
 tail -f /dev/null
