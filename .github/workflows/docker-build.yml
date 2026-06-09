@@ -34,9 +34,10 @@ jobs:
       - name: Get released Alpine version
         id: get-released
         if: github.event_name == 'schedule'
+        timeout-minutes: 5
         run: |
           if docker pull ${{ env.DOCKER_REPO }}:latest; then
-            VERSION=$(docker run --rm ${{ env.DOCKER_REPO }}:latest grep ^VERSION /etc/os-release | cut -f 2 -d =)
+            VERSION=$(docker run --rm --entrypoint grep ${{ env.DOCKER_REPO }}:latest ^VERSION /etc/os-release | cut -f 2 -d =)
             echo "version=$VERSION" >> $GITHUB_OUTPUT
           else
             echo "version=" >> $GITHUB_OUTPUT
